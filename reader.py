@@ -10,8 +10,18 @@ def onclick_button_browse_files():
 
 
 def generate_output_window():
-    file_address = entry_file_address.get()
-    max_line_length = int(entry_max_length.get())
+    try:
+        file_address = entry_file_address.get()
+        open(file_address)
+    except Exception:
+        error_string.set("File address invalid")
+        return
+
+    try:
+        max_line_length = int(entry_max_length.get())
+    except Exception:
+        error_string.set("Max line length invalid")
+        return
 
     window_output = Tk()
     text = Text(window_output)
@@ -42,9 +52,11 @@ def get_excess_lines(file_address, max_line_length):
 window_main = Tk()
 window_main.title("Line Length Checker")
 
+error_string = StringVar()
 #   Initialize labels
 Label(window_main, text="File Address", ).grid(row=0, column=0, sticky='W')
 Label(window_main, text="Max File Length").grid(row=1, column=0, sticky='W')
+Label(window_main, textvariable=error_string, fg = "red").grid(row=2, column=1, sticky='W')
 
 #   Initialize entries fields
 entry_file_address = Entry(window_main, width=50)
